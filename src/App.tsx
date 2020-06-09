@@ -11,6 +11,7 @@ import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 // Pages
 import { ErrorPage } from './pages/ErrorPage'
 import { IndexPage } from './pages/IndexPage'
+import { SignupPage } from './pages/SignupPage'
 
 // @ToDo: Refactor routes to another component -> Stack overflow
 const App: React.SFC = () => {
@@ -19,6 +20,7 @@ const App: React.SFC = () => {
       <Router>
         <Switch>
           <Route exact path="/" component={IndexPage} />
+          <Route exact path="/signup" component={SignupPage} />
           <Route component={ErrorPage} />
         </Switch>
       </Router>
