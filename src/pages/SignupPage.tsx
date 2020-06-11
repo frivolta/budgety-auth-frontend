@@ -85,39 +85,32 @@ export const SignupPage: React.FC = () => {
       <FullPageLayout>
         <SignupCard>
           <SignupCardContent>
-            <div className="page" role="main">
-              <div className="SignupContainer" data-testid="SignupContainer">
-                <div className="Card">
-                  <H1 color={theme.colors.darkPrimary}>
-                    Fill out the form <br />
-                    and <Span>Sign Up</Span>.
-                  </H1>
-                  <form onSubmit={(e) => handleSubmit(e)}>
-                    <Input
-                      name="email"
-                      placeholder="E-mail"
-                      type="text"
-                      value={email}
-                      handleChange={(event) => handleInputChange(event)}
-                    />
-                    <Input
-                      name="password"
-                      placeholder="password"
-                      type="password"
-                      value={password}
-                      handleChange={(event) => handleInputChange(event)}
-                      hasErrors
-                      errorMessage="test"
-                    />
-                    <CustomButton text="Sign up" />
-                    <CustomLabel>
-                      Already have an account?{' '}
-                      <Link to="/signin">Sign in.</Link>
-                    </CustomLabel>
-                  </form>
-                </div>
-              </div>
-            </div>
+            <H1 color={theme.colors.darkPrimary}>
+              Fill out the form <br />
+              and <Span>Sign Up</Span>.
+            </H1>
+            <form onSubmit={(e) => handleSubmit(e)}>
+              <Input
+                name="email"
+                placeholder="E-mail"
+                type="text"
+                value={email}
+                handleChange={(event) => handleInputChange(event)}
+              />
+              <Input
+                name="password"
+                placeholder="password"
+                type="password"
+                value={password}
+                handleChange={(event) => handleInputChange(event)}
+                hasErrors
+                errorMessage="test"
+              />
+              <CustomButton text="Sign up" />
+              <CustomLabel>
+                Already have an account? <Link to="/signin">Sign in.</Link>
+              </CustomLabel>
+            </form>
           </SignupCardContent>
         </SignupCard>
       </FullPageLayout>

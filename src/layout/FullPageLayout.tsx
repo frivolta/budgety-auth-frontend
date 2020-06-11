@@ -19,5 +19,9 @@ const FullPageContainer = styled.div`
 `
 
 export const FullPageLayout: React.FC<FullPageLayoutProps> = (props) => {
-  return <FullPageContainer>{props.children}</FullPageContainer>
+  return (
+    <div className="page" role="main">
+      <FullPageContainer>{props.children}</FullPageContainer>
+    </div>
+  )
 }
