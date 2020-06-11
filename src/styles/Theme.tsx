@@ -19,6 +19,7 @@ export type MyTheme = {
     incomeColor: string
     altBackground: string
     errorColor: string
+    background: string
   }
   fonts: string[]
   fontSizes: {
@@ -42,9 +43,6 @@ export type MyTheme = {
 const GlobalStyles = createGlobalStyle`
  * {
     font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 500;
   }
 `
 export const theme = {
@@ -58,6 +56,7 @@ export const theme = {
     altColor: '#ff224f',
     expenseColor: '#ff224f',
     incomeColor: '#9beb34',
+    background: '#f6f8f9',
     altBackground: 'rgba(255, 34, 79, 0.2)',
     errorColor: 'red',
   },

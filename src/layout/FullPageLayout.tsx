@@ -15,6 +15,7 @@ const FullPageContainer = styled.div`
   top: 0;
   transition: all 0.15s ease-in;
   z-index: 1000;
+  background-color: ${(props) => props.theme.colors.background};
 `
 
 export const FullPageLayout: React.FC<FullPageLayoutProps> = (props) => {

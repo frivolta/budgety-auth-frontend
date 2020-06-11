@@ -33,7 +33,7 @@
     "strict": ["error", "never"],
     "valid-typeof": "error",
     "no-unsafe-negation": "error",
-    "no-unused-vars": "error",
+    "no-unused-vars": "off",
     "no-unexpected-multiline": "error",
     "no-undef": "error",
     "@typescript-eslint/explicit-function-return-type": "off",

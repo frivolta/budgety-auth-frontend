@@ -4,9 +4,13 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
-import Theme from '../styles/Theme'
+import Theme, { theme } from '../styles/Theme'
 import { FullPageLayout } from '../layout/FullPageLayout'
 import { device } from '../styles/config'
+import { H1, Span } from '../styles/typography'
+import { Input } from '../components/Input/Input'
+import { CustomButton } from '../components/Button/Button'
+import { CustomLabel } from '../components/Label/Label'
 
 export const SignupCard = styled.div`
   position: relative;
@@ -14,12 +18,11 @@ export const SignupCard = styled.div`
   justify-content: center;
   align-items: center;
   margin: auto;
-  max-width: 100%;
-  min-width: 150px;
-  min-height: 150px;
   background-color: ${(props) => props.theme.colors.lightPrimary};
   box-shadow: 2px 0px 15px rgba(0, 0, 0, 0.05);
   border-radius: ${(props) => props.theme.misc.borderRadius};
+  min-width: 150px;
+  min-height: 150px;
   width: 100%;
   height: 100%;
   max-width: 100%;
@@ -34,6 +37,9 @@ export const SignupCard = styled.div`
 const SignupCardContent = styled.div`
   width: 100%;
   padding: 48px 32px;
+  h1 {
+    padding: 24px 0;
+  }
 `
 
 export const SIGNUP = gql`
@@ -80,34 +86,34 @@ export const SignupPage: React.FC = () => {
         <SignupCard>
           <SignupCardContent>
             <div className="page" role="main">
-              <h1>Signup page</h1>
               <div className="SignupContainer" data-testid="SignupContainer">
                 <div className="Card">
-                  <h1>
+                  <H1 color={theme.colors.darkPrimary}>
                     Fill out the form <br />
-                    and Sign Up.
-                  </h1>
+                    and <Span>Sign Up</Span>.
+                  </H1>
                   <form onSubmit={(e) => handleSubmit(e)}>
-                    <input
+                    <Input
                       name="email"
                       placeholder="E-mail"
                       type="text"
                       value={email}
-                      onChange={(event) => handleInputChange(event)}
+                      handleChange={(event) => handleInputChange(event)}
                     />
-                    <input
+                    <Input
                       name="password"
                       placeholder="password"
                       type="password"
                       value={password}
-                      onChange={(event) => handleInputChange(event)}
+                      handleChange={(event) => handleInputChange(event)}
+                      hasErrors
+                      errorMessage="test"
                     />
-                    <button>Sign up</button>
-
-                    <p>
+                    <CustomButton text="Sign up" />
+                    <CustomLabel>
                       Already have an account?{' '}
                       <Link to="/signin">Sign in.</Link>
-                    </p>
+                    </CustomLabel>
                   </form>
                 </div>
               </div>
