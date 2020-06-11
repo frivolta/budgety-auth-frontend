@@ -68,7 +68,9 @@ export const Input: React.FC<InputProps> = (props) => {
         data-testid="Input"
         hasErrors={props.hasErrors}
       />
-      {props.hasErrors && <InputError>{props.errorMessage}</InputError>}
+      {props.hasErrors && (
+        <InputError data-testid="InputError">{props.errorMessage}</InputError>
+      )}
     </InputContainer>
   )
 }

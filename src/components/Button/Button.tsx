@@ -49,7 +49,7 @@ export const CustomButton: React.FC<ButtonProps> = (props) => {
     <Button
       onClick={props.handleClick}
       disabled={props.disabled}
-      data-testid="Button"
+      data-testid="CustomButton"
     >
       {props.icon && <ButtonIcon src={props.icon} alt="button icon" />}
       {!props.isLoading && (
@@ -57,7 +57,13 @@ export const CustomButton: React.FC<ButtonProps> = (props) => {
       )}
       {props.isLoading && (
         <ButtonLabel>
-          <Spinner color="white" thickness={3} speed="slow" size="24px" />
+          <Spinner
+            color="white"
+            thickness={3}
+            speed="slow"
+            size="24px"
+            data-testid="Spinner"
+          />
         </ButtonLabel>
       )}
     </Button>
