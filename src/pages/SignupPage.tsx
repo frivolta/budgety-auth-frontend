@@ -55,6 +55,8 @@ export const SIGNUP = gql`
 export const SignupPage: React.FC = () => {
   const [signup, { loading, error, data }] = useMutation(SIGNUP)
   //@ToDo: Unit testing
+  //@ToDo: Adding labels
+  //@ToDo: Page overflow
   //@ToDo: Send GraphQL
   //@ToDo: Manage GraphQL errors
   //@ToDo: Manage GraphQL success
