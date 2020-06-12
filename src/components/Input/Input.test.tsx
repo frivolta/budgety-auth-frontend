@@ -13,7 +13,6 @@ describe('<Input/>', () => {
   }
   const name = 'name'
   const errormessage = 'error message'
-
   const handleChange = jest.fn()
   it('renders without errors with empty string value, defined type, placeholder', () => {
     const { getByTestId } = render(
