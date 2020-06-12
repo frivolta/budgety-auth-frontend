@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, getByText } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { Input } from './Input'
 import Theme from '../../styles/Theme'
@@ -56,6 +56,21 @@ describe('<Input/>', () => {
       </Theme>
     )
     expect(getByTestId('Input')).toBeDisabled()
+  })
+
+  it('has label if label value is passed', () => {
+    const { getByText } = render(
+      <Theme>
+        <Input
+          type={type.email}
+          name={name}
+          placeholder={placeholder}
+          errorMessage={errormessage}
+          label="Label message"
+        />
+      </Theme>
+    )
+    expect(getByText('Label message')).toBeInTheDocument()
   })
 
   it('to trigger change and to have new value', async () => {

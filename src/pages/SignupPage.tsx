@@ -4,14 +4,14 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { useFormik } from 'formik'
-
+import { formatNetworkErrorMessages } from '../utils/format'
 import Theme, { theme } from '../styles/Theme'
 import { FullPageLayout } from '../layout/FullPageLayout'
 import { device } from '../styles/config'
 import { H1, Span } from '../styles/typography'
 import { Input } from '../components/Input/Input'
 import { CustomButton } from '../components/Button/Button'
-import { CustomLabel } from '../components/Label/Label'
+import { CustomLabel, Label } from '../components/Label/Label'
 import { SignupSchema } from '../validation/Signup.validation'
 
 export const SignupCard = styled.div`
@@ -40,7 +40,7 @@ const SignupCardContent = styled.div`
   width: 100%;
   padding: 48px 32px;
   h1 {
-    padding: 24px 0;
+    padding-bottom: 24px;
   }
 `
 
@@ -53,11 +53,7 @@ export const SIGNUP = gql`
 `
 
 export const SignupPage: React.FC = () => {
-  const [signup, { loading, error, data }] = useMutation(SIGNUP)
-  //@ToDo: Unit testing
-  //@ToDo: Adding labels
-  //@ToDo: Page overflow
-  //@ToDo: Send GraphQL
+  const [signup, { loading, error }] = useMutation(SIGNUP)
   //@ToDo: Manage GraphQL errors
   //@ToDo: Manage GraphQL success
   //@ToDo: Integration testing
@@ -72,14 +68,13 @@ export const SignupPage: React.FC = () => {
       confirmPassword: '',
     },
     validationSchema: SignupSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+    onSubmit: async (values) => {
+      await signup({
+        variables: { email: values.email, password: values.password },
+      })
+      formik.resetForm()
     },
   })
-
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error :(</p>
-  if (data) console.log(data)
 
   return (
     <Theme>
@@ -93,11 +88,12 @@ export const SignupPage: React.FC = () => {
             <form onSubmit={formik.handleSubmit}>
               <Input
                 name="email"
-                placeholder="E-mail"
+                placeholder="yourname@company.com"
                 type="text"
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 value={formik.values.email}
+                label="Email"
                 hasErrors={
                   formik.touched.email && formik.errors.email ? true : false
                 }
@@ -107,6 +103,7 @@ export const SignupPage: React.FC = () => {
                 name="password"
                 placeholder="password"
                 type="password"
+                label="Password"
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 value={formik.values.password}
@@ -120,6 +117,7 @@ export const SignupPage: React.FC = () => {
               <Input
                 name="confirmPassword"
                 placeholder="Confirm Password"
+                label="Confirm Password"
                 type="password"
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
@@ -132,9 +130,16 @@ export const SignupPage: React.FC = () => {
                 }
                 errorMessage={formik.errors.confirmPassword}
               />
+              {error && (
+                <CustomLabel type="error">
+                  {formatNetworkErrorMessages(error.message)}
+                </CustomLabel>
+              )}
               <CustomButton
                 text="Sign up"
-                disabled={!formik.isValid || !formik.dirty}
+                disabled={!formik.isValid || !formik.dirty || loading}
+                margin="32px 0 16px 0"
+                isLoading={loading}
               />
               <CustomLabel>
                 Already have an account? <Link to="/signin">Sign in.</Link>

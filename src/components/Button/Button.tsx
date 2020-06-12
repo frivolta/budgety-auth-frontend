@@ -10,6 +10,7 @@ interface ButtonProps {
   icon?: string
   disabled?: boolean
   isLoading?: boolean
+  margin?: string
 }
 
 export const Button = styled.button<ButtonProps>`
@@ -22,7 +23,8 @@ export const Button = styled.button<ButtonProps>`
   font-size: ${(props) => props.theme.fontSizes.base};
   width: 100%;
   padding: ${(props) => props.theme.fontSizes.base};
-  margin: ${(props) => props.theme.fontSizes.base} 0;
+  margin: ${(props) =>
+    props.margin ? props.margin : `${props.theme.fontSizes.base} 0`};
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -50,6 +52,7 @@ export const CustomButton: React.FC<ButtonProps> = (props) => {
       onClick={props.handleClick}
       disabled={props.disabled}
       data-testid="CustomButton"
+      margin={props.margin}
     >
       {props.icon && <ButtonIcon src={props.icon} alt="button icon" />}
       {!props.isLoading && (

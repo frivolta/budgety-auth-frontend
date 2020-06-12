@@ -2,12 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 interface InputProps {
-  small?: boolean
   placeholder: string
   type: string
   name: string
   value?: string
-  register?: any
+  label?: string
   hasErrors?: boolean
   errorMessage?: string | undefined
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -30,13 +29,13 @@ const InputField = styled.input<InputProps>`
   border-radius: ${(props) => props.theme.misc.borderRadius};
   box-shadow: none;
   border: 1px solid
-    ${(props) => (props.hasErrors ? 'red' : props.theme.colors.darkPrimary)};
+    ${(props) => (props.hasErrors ? 'red' : props.theme.colors.darkSecondary)};
   color: ${(props) => props.theme.colors.darkPrimary};
   outline: none;
   font-weight: 300;
 
   ::placeholder {
-    color: ${(props) => props.theme.colors.darkPrimary};
+    color: ${(props) => props.theme.colors.darkSecondary};
   }
 
   :focus {
@@ -52,12 +51,23 @@ const InputError = styled.span`
   font-weight: 500;
 `
 
+const InputLabel = styled.label`
+  font-family: ${(props) => props.theme.fonts[0]};
+  font-size: ${(props) => props.theme.fontSizes.base};
+  font-weight: 300;
+  color: ${(props) => props.theme.colors.darkPrimary};
+  padding-bottom: 8px;
+`
+
 export const Input: React.FC<InputProps> = (props) => {
   return (
     <InputContainer>
+      {props.label && (
+        <InputLabel htmlFor={props.name}>{props.label} </InputLabel>
+      )}
       <InputField
+        id={props.name}
         name={props.name}
-        ref={props.register}
         type={props.type}
         value={props.value}
         onChange={props.handleChange}
