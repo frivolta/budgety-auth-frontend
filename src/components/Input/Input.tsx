@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { FieldError } from 'react-hook-form'
 
 interface InputProps {
   small?: boolean
@@ -9,11 +8,11 @@ interface InputProps {
   name: string
   value?: string
   register?: any
-  hasErrors?: FieldError | boolean | undefined
+  hasErrors?: boolean
   errorMessage?: string | undefined
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   disabled?: boolean
-  blur?: ((event: React.FocusEvent<HTMLInputElement>) => void) | undefined
+  handleBlur?: ((event: React.FocusEvent<HTMLInputElement>) => void) | undefined
 }
 
 const InputContainer = styled.div`
@@ -62,7 +61,7 @@ export const Input: React.FC<InputProps> = (props) => {
         type={props.type}
         value={props.value}
         onChange={props.handleChange}
-        onBlur={props.blur}
+        onBlur={props.handleBlur}
         placeholder={props.placeholder}
         disabled={props.disabled ? props.disabled : false}
         data-testid="Input"

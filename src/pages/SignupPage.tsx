@@ -3,6 +3,7 @@ import { Link } from '@reach/router'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import { useFormik } from 'formik'
 
 import Theme, { theme } from '../styles/Theme'
 import { FullPageLayout } from '../layout/FullPageLayout'
@@ -11,6 +12,7 @@ import { H1, Span } from '../styles/typography'
 import { Input } from '../components/Input/Input'
 import { CustomButton } from '../components/Button/Button'
 import { CustomLabel } from '../components/Label/Label'
+import { SignupSchema } from '../validation/Signup.validation'
 
 export const SignupCard = styled.div`
   position: relative;
@@ -51,30 +53,27 @@ export const SIGNUP = gql`
 `
 
 export const SignupPage: React.FC = () => {
-  const [email, setEmail] = React.useState<string>('')
-  const [password, setPassword] = React.useState<string>('')
   const [signup, { loading, error, data }] = useMutation(SIGNUP)
+  //@ToDo: Unit testing
+  //@ToDo: Send GraphQL
+  //@ToDo: Manage GraphQL errors
+  //@ToDo: Manage GraphQL success
+  //@ToDo: Integration testing
+  //@ToDo: Context
+  //@ToDo: Integration testing
+  //@ToDo: E2E
 
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    switch (event.target.name) {
-      case 'email':
-        setEmail(event.target.value)
-        break
-      case 'password':
-        setPassword(event.target.value)
-        break
-      default:
-        break
-    }
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log('call api' + email + password)
-    signup({ variables: { email: email, password: password } })
-  }
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validationSchema: SignupSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2))
+    },
+  })
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error :(</p>
@@ -89,24 +88,52 @@ export const SignupPage: React.FC = () => {
               Fill out the form <br />
               and <Span>Sign Up</Span>.
             </H1>
-            <form onSubmit={(e) => handleSubmit(e)}>
+            <form onSubmit={formik.handleSubmit}>
               <Input
                 name="email"
                 placeholder="E-mail"
                 type="text"
-                value={email}
-                handleChange={(event) => handleInputChange(event)}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.email}
+                hasErrors={
+                  formik.touched.email && formik.errors.email ? true : false
+                }
+                errorMessage={formik.errors.email}
               />
               <Input
                 name="password"
                 placeholder="password"
                 type="password"
-                value={password}
-                handleChange={(event) => handleInputChange(event)}
-                hasErrors
-                errorMessage="test"
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.password}
+                hasErrors={
+                  formik.touched.password && formik.errors.password
+                    ? true
+                    : false
+                }
+                errorMessage={formik.errors.password}
               />
-              <CustomButton text="Sign up" />
+              <Input
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                type="password"
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                value={formik.values.confirmPassword}
+                hasErrors={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                    ? true
+                    : false
+                }
+                errorMessage={formik.errors.confirmPassword}
+              />
+              <CustomButton
+                text="Sign up"
+                disabled={!formik.isValid || !formik.dirty}
+              />
               <CustomLabel>
                 Already have an account? <Link to="/signin">Sign in.</Link>
               </CustomLabel>
