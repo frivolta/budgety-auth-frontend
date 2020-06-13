@@ -13,10 +13,21 @@ import { ErrorPage } from './pages/ErrorPage'
 import { IndexPage } from './pages/IndexPage'
 import { SignupPage } from './pages/SignupPage'
 
+// Toaster
+import {
+  ToastsContainer,
+  ToastsStore,
+  ToastsContainerPosition,
+} from 'react-toasts'
+
 // @ToDo: Refactor routes to another component -> Stack overflow
 const App: React.SFC = () => {
   return (
     <ApolloProvider client={client}>
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.TOP_RIGHT}
+      />
       <Router>
         <Switch>
           <Route exact path="/" component={IndexPage} />

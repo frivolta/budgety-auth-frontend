@@ -1,14 +1,5 @@
 import * as yup from 'yup'
-
-export enum SIGNUP_ERRORS {
-  required = 'Required',
-  invalidEmail = 'Email not valid',
-  invalidPassword = 'Password not strong enough',
-  passwordRequired = 'Please enter your password',
-  confirmPasswordRequired = 'Please confirm your password',
-  passwordMatch = 'Passwords must match',
-}
-
+import { SIGNUP_ERRORS } from '../utils/messages'
 export const SignupSchema = yup.object().shape({
   email: yup
     .string()

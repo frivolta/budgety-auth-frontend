@@ -8,6 +8,8 @@
     "dev": "webpack-dev-server --open --config webpack.config.dev.js",
     "dev:hot": "npm run dev -- --hot",
     "test": "jest",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "format": "pretty-quick",
     "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx",
     "tsc": "tsc",
@@ -16,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && npm run lint && npm run tsc && npm run test"
+      "pre-commit": "pretty-quick --staged && npm run lint && npm run tsc && npm run test && npm run cy:run"
     }
   },
   "repository": {
@@ -30,6 +32,7 @@
   },
   "homepage": "https://github.com/frivolta/tooling#readme",
   "devDependencies": {
+    "@apollo/react-testing": "^3.1.4",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -48,6 +51,7 @@
     "babel-jest": "^25.2.4",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.4.2",
+    "cypress": "^4.8.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
@@ -97,6 +101,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-svg-spinner": "^1.0.4",
+    "react-toasts": "^3.0.6",
     "serve": "^11.3.0",
     "styled-components": "^5.1.1",
     "yup": "^0.29.1"

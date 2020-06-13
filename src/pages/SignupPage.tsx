@@ -11,8 +11,10 @@ import { device } from '../styles/config'
 import { H1, Span } from '../styles/typography'
 import { Input } from '../components/Input/Input'
 import { CustomButton } from '../components/Button/Button'
-import { CustomLabel, Label } from '../components/Label/Label'
+import { CustomLabel } from '../components/Label/Label'
 import { SignupSchema } from '../validation/Signup.validation'
+import { SIGNUP_SUCCESS, SIGNUP_ERRORS } from '../utils/messages'
+import { ToastsStore } from 'react-toasts'
 
 export const SignupCard = styled.div`
   position: relative;
@@ -54,13 +56,11 @@ export const SIGNUP = gql`
 
 export const SignupPage: React.FC = () => {
   const [signup, { loading, error }] = useMutation(SIGNUP)
-  //@ToDo: Manage GraphQL errors
-  //@ToDo: Manage GraphQL success
-  //@ToDo: Integration testing
-  //@ToDo: Context
   //@ToDo: Integration testing
   //@ToDo: E2E
-
+  //@ToDo: On success redirect
+  //@ToDo: Check if a user is already logged in
+  //@ToDo: Context
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -69,13 +69,17 @@ export const SignupPage: React.FC = () => {
     },
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
-      await signup({
-        variables: { email: values.email, password: values.password },
-      })
-      formik.resetForm()
+      try {
+        await signup({
+          variables: { email: values.email, password: values.password },
+        })
+        ToastsStore.success(SIGNUP_SUCCESS.success)
+        formik.resetForm()
+      } catch {
+        ToastsStore.error(SIGNUP_ERRORS.genericError)
+      }
     },
   })
-
   return (
     <Theme>
       <FullPageLayout>
@@ -140,6 +144,7 @@ export const SignupPage: React.FC = () => {
                 disabled={!formik.isValid || !formik.dirty || loading}
                 margin="32px 0 16px 0"
                 isLoading={loading}
+                data-testid="SubmitButton"
               />
               <CustomLabel>
                 Already have an account? <Link to="/signin">Sign in.</Link>
