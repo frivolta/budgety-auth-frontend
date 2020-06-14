@@ -2,6 +2,7 @@
 import { testUser } from '../../support/users'
 import { NETWORK } from '../../support/variables'
 import { SIGNUP_ERRORS } from '../../../src/utils/messages'
+import { SIGNUP } from '../../../src/pages/SignupPage'
 /**
  *  1) User get validation visual errors
  *  - Type username
@@ -51,5 +52,30 @@ describe('Signup', function () {
     cy.get('input[name="password"]').click().type(testUser.password)
     cy.get('input[name="confirmPassword"]').click().type(testUser.password)
     cy.get('button').should('be.enabled')
+  })
+})
+
+describe('Signup requests', function () {
+  it('shows enabled button if fields are filled correctly ', async () => {
+    cy.get('input[name="email"]').click().clear().type(testUser.email)
+    cy.get('input[name="password"]').click().clear().type(testUser.password)
+    cy.get('input[name="confirmPassword"]')
+      .click()
+      .clear()
+      .type(testUser.password)
+
+    // Stub rejection
+    cy.server()
+    cy.route({
+      url: 'https://auth-prisma-dev.herokuapp.com/',
+      method: 'POST',
+      status: 400,
+      response: { code: 400, message: 'Email already taken' },
+      delay: 1000,
+    }).as('signup-reject')
+    cy.get('button').should('be.enabled').click()
+    cy.wait('@signup-reject').then((xhr) => {
+      expect(xhr.status).to.equal(400)
+    })
   })
 })
