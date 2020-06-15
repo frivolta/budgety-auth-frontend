@@ -9,9 +9,9 @@ import { client } from './config/apolloClient'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
 // Pages
-import { ErrorPage } from './pages/ErrorPage'
-import { IndexPage } from './pages/IndexPage'
-import { SignupPage } from './pages/SignupPage'
+import ErrorPage from './pages/ErrorPage'
+import IndexPage from './pages/IndexPage'
+import SignupPage from './pages/SignupPage'
 
 // Toaster
 import {
@@ -19,6 +19,7 @@ import {
   ToastsStore,
   ToastsContainerPosition,
 } from 'react-toasts'
+import SigninPage from './pages/SigninPage'
 
 // @ToDo: Refactor routes to another component -> Stack overflow
 const App: React.SFC = () => {
@@ -32,6 +33,7 @@ const App: React.SFC = () => {
         <Switch>
           <Route exact path="/" component={IndexPage} />
           <Route exact path="/signup" component={SignupPage} />
+          <Route exact path="/signin" component={SigninPage} />
           <Route component={ErrorPage} />
         </Switch>
       </Router>

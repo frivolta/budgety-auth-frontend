@@ -11,11 +11,12 @@ import { H1, Span } from '../styles/typography'
 import { Input } from '../components/Input/Input'
 import { CustomButton } from '../components/Button/Button'
 import { CustomLabel } from '../components/Label/Label'
-import { SignupSchema } from '../validation/Signup.validation'
+import { SigninSchema } from '../validation/Signin.validation'
 import { SIGNUP_SUCCESS, SIGNUP_ERRORS } from '../utils/messages'
 import { ToastsStore } from 'react-toasts'
+import { Link } from 'react-router-dom'
 
-export const SignupCard = styled.div`
+export const Signin = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
@@ -37,7 +38,7 @@ export const SignupCard = styled.div`
     max-width: 900px;
   }
 `
-const SignupCardContent = styled.div`
+const SigninContent = styled.div`
   width: 100%;
   padding: 48px 32px;
   h1 {
@@ -45,26 +46,30 @@ const SignupCardContent = styled.div`
   }
 `
 
-export const SIGNUP = gql`
-  mutation Signup($email: String!, $password: String!) {
-    signup(email: $email, password: $password) {
+export const LOGIN = gql`
+  mutation Login {
+    login(email: "rivoltafilippo3@gmail.com", password: "Lampone01!") {
       token
+      user {
+        id
+        email
+      }
     }
   }
 `
 
-const SignupPage: React.FC = () => {
-  const [signup, { loading, error }] = useMutation(SIGNUP)
-  //@ToDo: On success redirect
+const SigninPage: React.FC = () => {
+  const [signup, { loading, error }] = useMutation(LOGIN)
   //@ToDo: Check if a user is already logged in
+  //@ToDo: On success redirect
   //@ToDo: Context
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
-      confirmPassword: '',
     },
-    validationSchema: SignupSchema,
+    // validationSchema: Signin Schema,
+    validationSchema: SigninSchema,
     onSubmit: async (values) => {
       try {
         await signup({
@@ -80,11 +85,11 @@ const SignupPage: React.FC = () => {
   return (
     <Theme>
       <FullPageLayout>
-        <SignupCard>
-          <SignupCardContent>
+        <Signin>
+          <SigninContent>
             <H1 color={theme.colors.darkPrimary}>
               Fill out the form <br />
-              and <Span>Sign Up</Span>.
+              and <Span>Sign In</Span>.
             </H1>
             <form onSubmit={formik.handleSubmit}>
               <Input
@@ -115,43 +120,27 @@ const SignupPage: React.FC = () => {
                 }
                 errorMessage={formik.errors.password}
               />
-              <Input
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                label="Confirm Password"
-                type="password"
-                handleChange={formik.handleChange}
-                handleBlur={formik.handleBlur}
-                value={formik.values.confirmPassword}
-                hasErrors={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? true
-                    : false
-                }
-                errorMessage={formik.errors.confirmPassword}
-              />
               {error && (
                 <CustomLabel type="error">
                   {formatNetworkErrorMessages(error.message)}
                 </CustomLabel>
               )}
               <CustomButton
-                text="Sign up"
+                text="Sign in"
                 disabled={!formik.isValid || !formik.dirty || loading}
                 margin="32px 0 16px 0"
                 isLoading={loading}
                 data-testid="SubmitButton"
               />
               <CustomLabel>
-                Already have an account? <a href="/signin">Sign in.</a>
+                Don&apos;t have an account yet? <a href="/signup">Sign up.</a>
               </CustomLabel>
             </form>
-          </SignupCardContent>
-        </SignupCard>
+          </SigninContent>
+        </Signin>
       </FullPageLayout>
     </Theme>
   )
 }
 
-export default SignupPage
+export default SigninPage

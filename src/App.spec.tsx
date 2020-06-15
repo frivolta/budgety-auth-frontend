@@ -8,8 +8,8 @@ import { Route, Switch, Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import '@testing-library/jest-dom/extend-expect'
 
-import { IndexPage } from './pages/IndexPage'
-import { ErrorPage } from './pages/ErrorPage'
+import IndexPage from './pages/IndexPage'
+import ErrorPage from './pages/ErrorPage'
 
 describe('App', () => {
   it('renders without error', () => {
