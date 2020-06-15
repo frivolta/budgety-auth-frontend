@@ -60,9 +60,6 @@ export const LOGIN = gql`
 
 const SigninPage: React.FC = () => {
   const [signup, { loading, error }] = useMutation(LOGIN)
-  //@ToDo: Check if a user is already logged in
-  //@ToDo: On success redirect
-  //@ToDo: Context
   const formik = useFormik({
     initialValues: {
       email: '',
