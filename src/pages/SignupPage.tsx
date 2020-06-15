@@ -14,6 +14,8 @@ import { CustomLabel } from '../components/Label/Label'
 import { SignupSchema } from '../validation/Signup.validation'
 import { SIGNUP_SUCCESS, SIGNUP_ERRORS } from '../utils/messages'
 import { ToastsStore } from 'react-toasts'
+import { useAuth } from '../context/auth/useAuth'
+import { useHistory } from 'react-router-dom'
 
 export const SignupCard = styled.div`
   position: relative;
@@ -55,9 +57,16 @@ export const SIGNUP = gql`
 
 const SignupPage: React.FC = () => {
   const [signup, { loading, error }] = useMutation(SIGNUP)
-  //@ToDo: On success redirect
-  //@ToDo: Check if a user is already logged in
-  //@ToDo: Context
+  const useAuthValues: any = useAuth()
+  let history = useHistory()
+
+  React.useEffect(() => {
+    // Check if user is already logged in
+    if (useAuthValues.authTokens) {
+      history.push('/dashboard')
+    }
+  }, [useAuthValues.authTokens])
+
   const formik = useFormik({
     initialValues: {
       email: '',

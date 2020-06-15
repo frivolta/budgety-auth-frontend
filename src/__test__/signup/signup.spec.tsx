@@ -7,6 +7,7 @@ import { MockedProvider } from '@apollo/react-testing'
 import '@testing-library/jest-dom/extend-expect'
 import SignupPage, { SIGNUP } from '../../pages/SignupPage'
 import { SIGNUP_ERRORS } from '../../utils/messages'
+import { AuthContext } from '../../context/auth/useAuth'
 
 /**
  * 1) User can signup with right credentials
@@ -44,11 +45,25 @@ const mockSignupMutation = [
   },
 ]
 
-const SignupComponent = () => (
-  <MockedProvider mocks={mockSignupMutation} addTypename={false}>
-    <SignupPage />
-  </MockedProvider>
-)
+const SignupComponent = () => {
+  const getLocalStorageToken = (): string | null => {
+    const tokens = localStorage.getItem('tokens')
+    return tokens ? JSON.parse(tokens) : undefined
+  }
+  const [authTokens, setAuthTokens] = React.useState(getLocalStorageToken())
+
+  const setTokens = (data: string) => {
+    localStorage.setItem('tokens', JSON.stringify(data))
+    setAuthTokens(data)
+  }
+  return (
+    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+      <MockedProvider mocks={mockSignupMutation} addTypename={false}>
+        <SignupPage />
+      </MockedProvider>
+    </AuthContext.Provider>
+  )
+}
 
 describe('<SignupPage />', () => {
   it('renders the component without errors', () => {

@@ -12,9 +12,10 @@ import { Input } from '../components/Input/Input'
 import { CustomButton } from '../components/Button/Button'
 import { CustomLabel } from '../components/Label/Label'
 import { SigninSchema } from '../validation/Signin.validation'
-import { SIGNUP_SUCCESS, SIGNUP_ERRORS } from '../utils/messages'
+import { SIGNIN_ERRORS, SIGNIN_SUCCESS } from '../utils/messages'
 import { ToastsStore } from 'react-toasts'
-import { Link } from 'react-router-dom'
+import { useAuth } from '../context/auth/useAuth'
+import { useHistory } from 'react-router-dom'
 
 export const Signin = styled.div`
   position: relative;
@@ -59,23 +60,33 @@ export const LOGIN = gql`
 `
 
 const SigninPage: React.FC = () => {
-  const [signup, { loading, error }] = useMutation(LOGIN)
+  const useAuthValues: any = useAuth()
+  const [signin, { loading, error }] = useMutation(LOGIN)
+  let history = useHistory()
+
+  React.useEffect(() => {
+    // Check if user is already logged in
+    if (useAuthValues && useAuthValues.authTokens) {
+      history.push('/dashboard')
+    }
+  }, [useAuthValues && useAuthValues.authTokens])
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    // validationSchema: Signin Schema,
     validationSchema: SigninSchema,
     onSubmit: async (values) => {
       try {
-        await signup({
+        const res: any = await signin({
           variables: { email: values.email, password: values.password },
         })
-        ToastsStore.success(SIGNUP_SUCCESS.success)
+        await useAuthValues.setAuthTokens(res.data.login.token)
+        ToastsStore.success(SIGNIN_SUCCESS.success)
         formik.resetForm()
       } catch {
-        ToastsStore.error(SIGNUP_ERRORS.genericError)
+        ToastsStore.error(SIGNIN_ERRORS.genericError)
       }
     },
   })

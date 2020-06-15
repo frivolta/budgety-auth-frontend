@@ -16,3 +16,7 @@ export enum SIGNIN_ERRORS {
 export enum SIGNUP_SUCCESS {
   success = 'You succesfully signed up!',
 }
+
+export enum SIGNIN_SUCCESS {
+  success = 'You succesfully signed in!',
+}
