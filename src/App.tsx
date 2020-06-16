@@ -22,6 +22,7 @@ import {
 import SigninPage from './pages/SigninPage'
 import { AuthContext } from './context/auth/useAuth'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
+import DashboardPage from './pages/DashboardPage'
 
 // @ToDo: Refactor routes to another component -> Stack overflow
 const App: React.SFC = () => {
@@ -47,7 +48,7 @@ const App: React.SFC = () => {
             <Route exact path="/" component={IndexPage} />
             <Route exact path="/signup" component={SignupPage} />
             <Route exact path="/signin" component={SigninPage} />
-            <PrivateRoute exact path="/dashboard" component={IndexPage} />
+            <PrivateRoute exact path="/dashboard" component={DashboardPage} />
             <Route component={ErrorPage} />
           </Switch>
         </Router>
