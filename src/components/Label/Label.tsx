@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { theme } from '../../styles/Theme'
 
 interface CustomLabelProps {
-  children?: React.ReactNode
+  children: React.ReactNode
   type?: string
 }
 

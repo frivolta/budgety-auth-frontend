@@ -1,14 +1,24 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { Button } from './Button'
+import { CustomButton } from '../Button/Button'
 import Card from '../Card/Card'
 import CardContainer from '../Card/CardContainer'
 
-storiesOf('Components', module).add('Default Button', () => (
-  <Card customWidth={50} customHeight={300}>
+storiesOf('Components', module).add('Custom Button', () => (
+  <Card customWidth={50}>
     <CardContainer>
-      <Button>Default Button</Button>
+      <CustomButton handleClick={action('click')} text="Default Button" />
+    </CardContainer>
+    <CardContainer>
+      <CustomButton
+        handleClick={action('click')}
+        text="Loading Button"
+        isLoading
+      />
+    </CardContainer>
+    <CardContainer>
+      <CustomButton handleClick={action('click')} text="Disabled" disabled />
     </CardContainer>
   </Card>
 ))

@@ -50,7 +50,7 @@ export const CustomButton: React.FC<ButtonProps> = (props) => {
   return (
     <Button
       onClick={props.handleClick}
-      disabled={props.disabled}
+      disabled={props.disabled || props.isLoading}
       data-testid="CustomButton"
       margin={props.margin}
     >
@@ -64,7 +64,7 @@ export const CustomButton: React.FC<ButtonProps> = (props) => {
             color="white"
             thickness={3}
             speed="slow"
-            size="24px"
+            size="15px"
             data-testid="Spinner"
           />
         </ButtonLabel>
