@@ -5,7 +5,7 @@ import { onError } from 'apollo-link-error'
 import { ApolloLink } from 'apollo-link'
 import fetch from 'isomorphic-fetch'
 
-const uri = 'https://auth-prisma-dev.herokuapp.com/'
+export const uri = 'https://auth-prisma-dev.herokuapp.com/'
 
 export const client = new ApolloClient({
   link: ApolloLink.from([
