@@ -29,6 +29,7 @@ const failResp = {
 }
 describe('Signup', function () {
   this.beforeEach(() => {
+    cy.viewport('iphone-6')
     cy.visit(`${NETWORK.LOCAL}/signup`, {
       onBeforeLoad: (win) => {
         win.fetch = null
@@ -73,6 +74,14 @@ describe('Signup', function () {
 })
 
 describe('Signup requests', function () {
+  this.beforeEach(() => {
+    cy.viewport('iphone-6')
+    cy.visit(`${NETWORK.LOCAL}/signup`, {
+      onBeforeLoad: (win) => {
+        win.fetch = null
+      },
+    }).contains('Sign up')
+  })
   it('shows enabled button if fields are filled correctly ', () => {
     cy.server()
     cy.route({
