@@ -1,14 +1,17 @@
 import '@testing-library/jest-dom'
 import React from 'react'
 import '@testing-library/jest-dom'
-import { render, fireEvent, waitFor } from '@testing-library/react'
+import { render, fireEvent, waitFor, getByText } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MockedProvider } from '@apollo/react-testing'
 import '@testing-library/jest-dom/extend-expect'
 import SignupPage, { SIGNUP } from '../../pages/SignupPage'
 import { SIGNUP_ERRORS } from '../../utils/messages'
 import { AuthContext } from '../../context/auth/useAuth'
-
+import {
+  SIGNUP_REQUEST_REJECTED,
+  SIGNUP_REQUEST_SUCCESS,
+} from '../../../cypress/support/requests'
 /**
  * 1) User can signup with right credentials
  *  - Type username
@@ -34,18 +37,27 @@ const mockSignupMutation = [
     },
     result: jest.fn(() => {
       signupMutationCalled = true
-      return {
-        data: {
-          signup: {
-            token: 'valid token',
-          },
-        },
-      }
+      return SIGNUP_REQUEST_SUCCESS
     }),
   },
 ]
 
-const SignupComponent = () => {
+const mockRejectMutation = [
+  {
+    request: {
+      query: SIGNUP,
+      variables: {
+        email: testUser.email,
+        password: testUser.password,
+      },
+    },
+    result: jest.fn(() => {
+      return SIGNUP_REQUEST_REJECTED
+    }),
+  },
+]
+
+const SignupComponent = ({ mock }: any) => {
   const getLocalStorageToken = (): string | null => {
     const tokens = localStorage.getItem('tokens')
     return tokens ? JSON.parse(tokens) : undefined
@@ -58,7 +70,7 @@ const SignupComponent = () => {
   }
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
-      <MockedProvider mocks={mockSignupMutation} addTypename={false}>
+      <MockedProvider mocks={mock} addTypename={false}>
         <SignupPage />
       </MockedProvider>
     </AuthContext.Provider>
@@ -67,12 +79,14 @@ const SignupComponent = () => {
 
 describe('<SignupPage />', () => {
   it('renders the component without errors', () => {
-    const { container } = render(<SignupComponent />)
+    const { container } = render(<SignupComponent mock={mockSignupMutation} />)
     expect(container.innerHTML).toMatch('Sign up')
   })
 
   it('let user signup with valid credentials', async () => {
-    const { getByLabelText, getByTestId } = render(<SignupComponent />)
+    const { getByLabelText, getByTestId } = render(
+      <SignupComponent mock={mockSignupMutation} />
+    )
     const emailInput = getByLabelText('Email')
     const passwordInput = getByLabelText('Password')
     const confirmPasswordInput = getByLabelText('Confirm Password')
@@ -102,7 +116,7 @@ describe('<SignupPage />', () => {
   })
   it('triggers errors for user not using right credentials', async () => {
     const { getByLabelText, getByTestId, getByText } = render(
-      <SignupComponent />
+      <SignupComponent mock={mockSignupMutation} />
     )
     const emailInput = getByLabelText('Email')
     const passwordInput = getByLabelText('Password')
@@ -123,5 +137,31 @@ describe('<SignupPage />', () => {
     expect(getByText(SIGNUP_ERRORS.invalidEmail)).toBeInTheDocument()
     expect(getByText(SIGNUP_ERRORS.invalidPassword)).toBeInTheDocument()
     expect(getByText(SIGNUP_ERRORS.passwordMatch)).toBeInTheDocument()
+  })
+
+  it('rejects user creation if email is already present ', async () => {
+    const { getByLabelText, getByTestId, getByText } = render(
+      <SignupComponent mock={mockRejectMutation} />
+    )
+    const emailInput = getByLabelText('Email')
+    const passwordInput = getByLabelText('Password')
+    const confirmPasswordInput = getByLabelText('Confirm Password')
+    const submitButton = getByTestId('CustomButton')
+    // Type user credentials enabling signup button
+    fireEvent.change(emailInput, { target: { value: testUser.email } })
+    fireEvent.change(passwordInput, {
+      target: { value: testUser.password },
+    })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: testUser.password },
+    })
+    // User triggers mutation
+    userEvent.click(submitButton)
+    // Expect the errors to be in the dom
+    await waitFor(() =>
+      expect(
+        getByText(SIGNUP_REQUEST_REJECTED.errors[0].message.toString())
+      ).toBeInTheDocument()
+    )
   })
 })
