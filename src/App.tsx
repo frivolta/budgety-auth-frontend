@@ -24,18 +24,24 @@ import { AuthContext } from './context/auth/useAuth'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 import DashboardPage from './pages/DashboardPage'
 
+export type Token = {
+  tokens: string
+}
+
 // @ToDo: Refactor routes to another component -> Stack overflow
 const App: React.SFC = () => {
-  const getLocalStorageToken = (): string | null => {
+  const getLocalStorageToken = (): Token | null => {
     const tokens = localStorage.getItem('tokens')
     return tokens ? JSON.parse(tokens) : undefined
   }
-  const [authTokens, setAuthTokens] = useState(getLocalStorageToken())
 
-  const setTokens = (data: string) => {
+  const setTokens = (data: Token) => {
     localStorage.setItem('tokens', JSON.stringify(data))
     setAuthTokens(data)
   }
+
+  const [authTokens, setAuthTokens] = useState(getLocalStorageToken())
+
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <ApolloProvider client={client}>
