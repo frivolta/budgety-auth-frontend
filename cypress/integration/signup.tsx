@@ -97,7 +97,7 @@ describe('Signup requests', function () {
     cy.wait('@signup-reject').then((xhr) => {
       expect(xhr.status).to.equal(200)
       cy.get('form').contains(SIGNUP_REQUEST_REJECTED.errors[0].message)
-      cy.get('.toasts-container')
+      cy.get('.Toastify__toast-container')
         .contains(SIGNUP_ERRORS.genericError)
         .should('be.visible')
     })
@@ -119,7 +119,7 @@ describe('Signup requests', function () {
     // Wait for server response
     cy.wait('@signup-request').then((xhr) => {
       expect(xhr.status).to.equal(200)
-      cy.get('.toasts-container')
+      cy.get('.Toastify__toast-container')
         .contains(SIGNUP_SUCCESS.success)
         .should('be.visible')
     })

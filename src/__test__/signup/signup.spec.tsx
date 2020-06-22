@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import React from 'react'
 import '@testing-library/jest-dom'
-import { render, fireEvent, waitFor, getByText } from '@testing-library/react'
+import { render, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MockedProvider } from '@apollo/react-testing'
 import '@testing-library/jest-dom/extend-expect'

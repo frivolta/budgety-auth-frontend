@@ -13,12 +13,10 @@ import ErrorPage from './pages/ErrorPage'
 import IndexPage from './pages/IndexPage'
 import SignupPage from './pages/SignupPage'
 
-// Toaster
-import {
-  ToastsContainer,
-  ToastsStore,
-  ToastsContainerPosition,
-} from 'react-toasts'
+// Toastify__toast-container
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 import SigninPage from './pages/SigninPage'
 import { AuthContext } from './context/auth/useAuth'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
@@ -28,7 +26,13 @@ export type Token = {
   tokens: string
 }
 
-// @ToDo: Refactor routes to another component -> Stack overflow
+toast.configure({
+  className: 'Toastify__toast-container',
+  draggable: true,
+  draggablePercent: 60,
+  autoClose: 2000,
+})
+
 const App: React.SFC = () => {
   const getLocalStorageToken = (): Token | null => {
     const tokens = localStorage.getItem('tokens')
@@ -45,10 +49,7 @@ const App: React.SFC = () => {
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <ApolloProvider client={client}>
-        <ToastsContainer
-          store={ToastsStore}
-          position={ToastsContainerPosition.TOP_RIGHT}
-        />
+        <ToastContainer />
         <Router>
           <Switch>
             <Route exact path="/" component={IndexPage} />

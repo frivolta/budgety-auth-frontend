@@ -13,9 +13,9 @@ import { CustomButton } from '../components/Button/Button'
 import { CustomLabel } from '../components/Label/Label'
 import { SigninSchema } from '../validation/Signin.validation'
 import { SIGNIN_ERRORS, SIGNIN_SUCCESS } from '../utils/messages'
-import { ToastsStore } from 'react-toasts'
 import { useAuth } from '../context/auth/useAuth'
 import { useHistory } from 'react-router-dom'
+import { toasterInfo, toasterError } from '../utils/toaster'
 
 export const Signin = styled.div`
   position: relative;
@@ -48,8 +48,8 @@ const SigninContent = styled.div`
 `
 
 export const LOGIN = gql`
-  mutation Login {
-    login(email: "rivoltafilippo3@gmail.com", password: "Lampone01!") {
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       token
       user {
         id
@@ -79,14 +79,15 @@ const SigninPage: React.FC = () => {
     validationSchema: SigninSchema,
     onSubmit: async (values) => {
       try {
+        console.log(values)
         const res: any = await signin({
           variables: { email: values.email, password: values.password },
         })
         await useAuthValues.setAuthTokens(res.data.login.token)
-        ToastsStore.success(SIGNIN_SUCCESS.success)
+        toasterInfo(SIGNIN_SUCCESS.success)
         formik.resetForm()
       } catch {
-        ToastsStore.error(SIGNIN_ERRORS.genericError)
+        toasterError(SIGNIN_ERRORS.genericError)
       }
     },
   })

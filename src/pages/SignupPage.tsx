@@ -13,7 +13,7 @@ import { CustomButton } from '../components/Button/Button'
 import { CustomLabel } from '../components/Label/Label'
 import { SignupSchema } from '../validation/Signup.validation'
 import { SIGNUP_SUCCESS, SIGNUP_ERRORS } from '../utils/messages'
-import { ToastsStore } from 'react-toasts'
+import { toasterError, toasterSuccess } from '../utils/toaster'
 import { useAuth } from '../context/auth/useAuth'
 import { useHistory } from 'react-router-dom'
 
@@ -79,10 +79,10 @@ const SignupPage: React.FC = () => {
         await signup({
           variables: { email: values.email, password: values.password },
         })
-        ToastsStore.success(SIGNUP_SUCCESS.success)
+        toasterSuccess(SIGNUP_SUCCESS.success)
         formik.resetForm()
       } catch {
-        ToastsStore.error(SIGNUP_ERRORS.genericError)
+        toasterError(SIGNUP_ERRORS.genericError)
       }
     },
   })
